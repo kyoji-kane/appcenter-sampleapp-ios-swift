@@ -13,3 +13,14 @@ target 'sampleapp-ios-swift' do
   end
 
 end
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    # CI/CD環境でビルドエラーを防ぐためのおまじない
+    # 参考：https://github.com/fastlane/fastlane/issues/10543
+    # 　　：https://github.com/fastlane/fastlane/issues/12557
+    config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = ''
+    config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+    config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+  end
+end
